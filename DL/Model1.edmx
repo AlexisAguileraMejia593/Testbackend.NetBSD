@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TestbackendNetBSDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categorias">
+          <Key>
+            <PropertyRef Name="IdCategorias" />
+          </Key>
+          <Property Name="IdCategorias" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Productos">
+          <Key>
+            <PropertyRef Name="IdProductos" />
+          </Key>
+          <Property Name="IdProductos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumeroMaterial" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdSubSubCategorias" Type="int" Nullable="false" />
+          <Property Name="Inventario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubCategorias">
+          <Key>
+            <PropertyRef Name="IdSubCategorias" />
+          </Key>
+          <Property Name="IdSubCategorias" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdCategorias" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubSubCategorias">
+          <Key>
+            <PropertyRef Name="IdSubSubCategorias" />
+          </Key>
+          <Property Name="IdSubSubCategorias" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdSubCategorias" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Productos__IdSub__1B0907CE">
+          <End Role="SubSubCategorias" Type="Self.SubSubCategorias" Multiplicity="1" />
+          <End Role="Productos" Type="Self.Productos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubSubCategorias">
+              <PropertyRef Name="IdSubSubCategorias" />
+            </Principal>
+            <Dependent Role="Productos">
+              <PropertyRef Name="IdSubSubCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubCatego__IdCat__15502E78">
+          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
+          <End Role="SubCategorias" Type="Self.SubCategorias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="IdCategorias" />
+            </Principal>
+            <Dependent Role="SubCategorias">
+              <PropertyRef Name="IdCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubSubCat__IdSub__182C9B23">
+          <End Role="SubCategorias" Type="Self.SubCategorias" Multiplicity="1" />
+          <End Role="SubSubCategorias" Type="Self.SubSubCategorias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategorias">
+              <PropertyRef Name="IdSubCategorias" />
+            </Principal>
+            <Dependent Role="SubSubCategorias">
+              <PropertyRef Name="IdSubCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CategoriasGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ProductosAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="NumeroMaterial" Type="varchar" Mode="In" />
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+          <Parameter Name="Inventario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProductosDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProductos" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProductosGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ProductosGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProductos" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProductosGetByIdSubSubCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ProductosUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdProductos" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="NumeroMaterial" Type="varchar" Mode="In" />
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+          <Parameter Name="Inventario" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubCategoriasAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubCategoriasDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubCategoriasGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SubCategoriasGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubCategoriasGetByIdCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubCategoriasUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubSubCategoriasAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubSubCategoriasDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubSubCategoriasGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SubSubCategoriasGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubSubCategoriasGetByIdSubCategorias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SubSubCategoriasUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSubSubCategorias" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdSubCategorias" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="TestbackendNetBSDModelStoreContainer">
+          <EntitySet Name="Categorias" EntityType="Self.Categorias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Productos" EntityType="Self.Productos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubCategorias" EntityType="Self.SubCategorias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubSubCategorias" EntityType="Self.SubSubCategorias" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Productos__IdSub__1B0907CE" Association="Self.FK__Productos__IdSub__1B0907CE">
+            <End Role="SubSubCategorias" EntitySet="SubSubCategorias" />
+            <End Role="Productos" EntitySet="Productos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubCatego__IdCat__15502E78" Association="Self.FK__SubCatego__IdCat__15502E78">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="SubCategorias" EntitySet="SubCategorias" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubSubCat__IdSub__182C9B23" Association="Self.FK__SubSubCat__IdSub__182C9B23">
+            <End Role="SubCategorias" EntitySet="SubCategorias" />
+            <End Role="SubSubCategorias" EntitySet="SubSubCategorias" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestbackendNetBSDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Categorias">
+          <Key>
+            <PropertyRef Name="IdCategorias" />
+          </Key>
+          <Property Name="IdCategorias" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SubCategorias" Relationship="Self.FK__SubCatego__IdCat__15502E78" FromRole="Categorias" ToRole="SubCategorias" />
+        </EntityType>
+        <EntityType Name="Productos">
+          <Key>
+            <PropertyRef Name="IdProductos" />
+          </Key>
+          <Property Name="IdProductos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumeroMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdSubSubCategorias" Type="Int32" Nullable="false" />
+          <Property Name="Inventario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SubSubCategorias" Relationship="Self.FK__Productos__IdSub__1B0907CE" FromRole="Productos" ToRole="SubSubCategorias" />
+        </EntityType>
+        <EntityType Name="SubCategorias">
+          <Key>
+            <PropertyRef Name="IdSubCategorias" />
+          </Key>
+          <Property Name="IdSubCategorias" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdCategorias" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Categorias" Relationship="Self.FK__SubCatego__IdCat__15502E78" FromRole="SubCategorias" ToRole="Categorias" />
+          <NavigationProperty Name="SubSubCategorias" Relationship="Self.FK__SubSubCat__IdSub__182C9B23" FromRole="SubCategorias" ToRole="SubSubCategorias" />
+        </EntityType>
+        <EntityType Name="SubSubCategorias">
+          <Key>
+            <PropertyRef Name="IdSubSubCategorias" />
+          </Key>
+          <Property Name="IdSubSubCategorias" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdSubCategorias" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Productos" Relationship="Self.FK__Productos__IdSub__1B0907CE" FromRole="SubSubCategorias" ToRole="Productos" />
+          <NavigationProperty Name="SubCategorias" Relationship="Self.FK__SubSubCat__IdSub__182C9B23" FromRole="SubSubCategorias" ToRole="SubCategorias" />
+        </EntityType>
+        <Association Name="FK__SubCatego__IdCat__15502E78">
+          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
+          <End Role="SubCategorias" Type="Self.SubCategorias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="IdCategorias" />
+            </Principal>
+            <Dependent Role="SubCategorias">
+              <PropertyRef Name="IdCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productos__IdSub__1B0907CE">
+          <End Role="SubSubCategorias" Type="Self.SubSubCategorias" Multiplicity="1" />
+          <End Role="Productos" Type="Self.Productos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubSubCategorias">
+              <PropertyRef Name="IdSubSubCategorias" />
+            </Principal>
+            <Dependent Role="Productos">
+              <PropertyRef Name="IdSubSubCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SubSubCat__IdSub__182C9B23">
+          <End Role="SubCategorias" Type="Self.SubCategorias" Multiplicity="1" />
+          <End Role="SubSubCategorias" Type="Self.SubSubCategorias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubCategorias">
+              <PropertyRef Name="IdSubCategorias" />
+            </Principal>
+            <Dependent Role="SubSubCategorias">
+              <PropertyRef Name="IdSubCategorias" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestbackendNetBSDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categorias" EntityType="Self.Categorias" />
+          <EntitySet Name="Productos" EntityType="Self.Productos" />
+          <EntitySet Name="SubCategorias" EntityType="Self.SubCategorias" />
+          <EntitySet Name="SubSubCategorias" EntityType="Self.SubSubCategorias" />
+          <AssociationSet Name="FK__SubCatego__IdCat__15502E78" Association="Self.FK__SubCatego__IdCat__15502E78">
+            <End Role="Categorias" EntitySet="Categorias" />
+            <End Role="SubCategorias" EntitySet="SubCategorias" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productos__IdSub__1B0907CE" Association="Self.FK__Productos__IdSub__1B0907CE">
+            <End Role="SubSubCategorias" EntitySet="SubSubCategorias" />
+            <End Role="Productos" EntitySet="Productos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SubSubCat__IdSub__182C9B23" Association="Self.FK__SubSubCat__IdSub__182C9B23">
+            <End Role="SubCategorias" EntitySet="SubCategorias" />
+            <End Role="SubSubCategorias" EntitySet="SubSubCategorias" />
+          </AssociationSet>
+          <FunctionImport Name="CategoriasGetAll" ReturnType="Collection(TestbackendNetBSDModel.CategoriasGetAll_Result)" />
+          <FunctionImport Name="SubCategoriasAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubCategoriasDelete">
+          <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubCategoriasGetAll" ReturnType="Collection(TestbackendNetBSDModel.SubCategoriasGetAll_Result)" />
+          <FunctionImport Name="SubCategoriasGetById" ReturnType="Collection(TestbackendNetBSDModel.SubCategoriasGetById_Result)">
+          <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubCategoriasUpdate">
+            <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubSubCategoriasAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubSubCategoriasDelete">
+          <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubSubCategoriasGetAll" ReturnType="Collection(TestbackendNetBSDModel.SubSubCategoriasGetAll_Result)" />
+          <FunctionImport Name="SubSubCategoriasGetById" ReturnType="Collection(TestbackendNetBSDModel.SubSubCategoriasGetById_Result)">
+          <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubSubCategoriasUpdate">
+            <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProductosAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="NumeroMaterial" Mode="In" Type="String" />
+            <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+            <Parameter Name="Inventario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProductosDelete">
+          <Parameter Name="IdProductos" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProductosGetAll" ReturnType="Collection(TestbackendNetBSDModel.ProductosGetAll_Result)" />
+          <FunctionImport Name="ProductosGetById" ReturnType="Collection(TestbackendNetBSDModel.ProductosGetById_Result)">
+          <Parameter Name="IdProductos" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProductosUpdate">
+            <Parameter Name="IdProductos" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="NumeroMaterial" Mode="In" Type="String" />
+            <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+            <Parameter Name="Inventario" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubCategoriasGetByIdCategorias" ReturnType="Collection(TestbackendNetBSDModel.SubCategoriasGetByIdCategorias_Result)">
+          <Parameter Name="IdCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SubSubCategoriasGetByIdSubCategorias" ReturnType="Collection(TestbackendNetBSDModel.SubSubCategoriasGetByIdSubCategorias_Result)">
+          <Parameter Name="IdSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ProductosGetByIdSubSubCategorias" ReturnType="Collection(TestbackendNetBSDModel.ProductosGetByIdSubSubCategorias_Result)">
+            <Parameter Name="IdSubSubCategorias" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="CategoriasGetAll_Result">
+          <Property Type="Int32" Name="IdCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SubCategoriasGetAll_Result">
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SubCategoriasGetById_Result">
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SubSubCategoriasGetAll_Result">
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SubSubCategoriasGetById_Result">
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ProductosGetAll_Result">
+          <Property Type="Int32" Name="IdProductos" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NumeroMaterial" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+          <Property Type="Int32" Name="Inventario" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ProductosGetById_Result">
+          <Property Type="Int32" Name="IdProductos" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NumeroMaterial" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+          <Property Type="Int32" Name="Inventario" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SubCategoriasGetByIdCategorias_Result">
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SubSubCategoriasGetByIdSubCategorias_Result">
+          <Property Type="Int32" Name="IdSubCategorias" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ProductosGetByIdSubSubCategorias_Result">
+          <Property Type="Int32" Name="IdProductos" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="NumeroMaterial" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IdSubSubCategorias" Nullable="false" />
+          <Property Type="Int32" Name="Inventario" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestbackendNetBSDModelStoreContainer" CdmEntityContainer="TestbackendNetBSDEntities">
+          <EntitySetMapping Name="Categorias">
+            <EntityTypeMapping TypeName="TestbackendNetBSDModel.Categorias">
+              <MappingFragment StoreEntitySet="Categorias">
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productos">
+            <EntityTypeMapping TypeName="TestbackendNetBSDModel.Productos">
+              <MappingFragment StoreEntitySet="Productos">
+                <ScalarProperty Name="IdProductos" ColumnName="IdProductos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="NumeroMaterial" ColumnName="NumeroMaterial" />
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Inventario" ColumnName="Inventario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubCategorias">
+            <EntityTypeMapping TypeName="TestbackendNetBSDModel.SubCategorias">
+              <MappingFragment StoreEntitySet="SubCategorias">
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubSubCategorias">
+            <EntityTypeMapping TypeName="TestbackendNetBSDModel.SubSubCategorias">
+              <MappingFragment StoreEntitySet="SubSubCategorias">
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CategoriasGetAll" FunctionName="TestbackendNetBSDModel.Store.CategoriasGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.CategoriasGetAll_Result">
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubCategoriasAdd" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasAdd" />
+          <FunctionImportMapping FunctionImportName="SubCategoriasDelete" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasDelete" />
+          <FunctionImportMapping FunctionImportName="SubCategoriasGetAll" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubCategoriasGetAll_Result">
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubCategoriasGetById" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasGetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubCategoriasGetById_Result">
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubCategoriasUpdate" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasUpdate" />
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasAdd" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasAdd" />
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasDelete" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasDelete" />
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasGetAll" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubSubCategoriasGetAll_Result">
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasGetById" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasGetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubSubCategoriasGetById_Result">
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasUpdate" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasUpdate" />
+          <FunctionImportMapping FunctionImportName="ProductosAdd" FunctionName="TestbackendNetBSDModel.Store.ProductosAdd" />
+          <FunctionImportMapping FunctionImportName="ProductosDelete" FunctionName="TestbackendNetBSDModel.Store.ProductosDelete" />
+          <FunctionImportMapping FunctionImportName="ProductosGetAll" FunctionName="TestbackendNetBSDModel.Store.ProductosGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.ProductosGetAll_Result">
+                <ScalarProperty Name="IdProductos" ColumnName="IdProductos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="NumeroMaterial" ColumnName="NumeroMaterial" />
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Inventario" ColumnName="Inventario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProductosGetById" FunctionName="TestbackendNetBSDModel.Store.ProductosGetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.ProductosGetById_Result">
+                <ScalarProperty Name="IdProductos" ColumnName="IdProductos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="NumeroMaterial" ColumnName="NumeroMaterial" />
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Inventario" ColumnName="Inventario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProductosUpdate" FunctionName="TestbackendNetBSDModel.Store.ProductosUpdate" />
+          <FunctionImportMapping FunctionImportName="SubCategoriasGetByIdCategorias" FunctionName="TestbackendNetBSDModel.Store.SubCategoriasGetByIdCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubCategoriasGetByIdCategorias_Result">
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCategorias" ColumnName="IdCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SubSubCategoriasGetByIdSubCategorias" FunctionName="TestbackendNetBSDModel.Store.SubSubCategoriasGetByIdSubCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.SubSubCategoriasGetByIdSubCategorias_Result">
+                <ScalarProperty Name="IdSubCategorias" ColumnName="IdSubCategorias" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ProductosGetByIdSubSubCategorias" FunctionName="TestbackendNetBSDModel.Store.ProductosGetByIdSubSubCategorias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestbackendNetBSDModel.ProductosGetByIdSubSubCategorias_Result">
+                <ScalarProperty Name="IdProductos" ColumnName="IdProductos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="NumeroMaterial" ColumnName="NumeroMaterial" />
+                <ScalarProperty Name="IdSubSubCategorias" ColumnName="IdSubSubCategorias" />
+                <ScalarProperty Name="Inventario" ColumnName="Inventario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

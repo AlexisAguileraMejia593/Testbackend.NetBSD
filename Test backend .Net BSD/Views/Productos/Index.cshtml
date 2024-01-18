@@ -1,0 +1,192 @@
+﻿@model ML.Productos
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .Letra {
+        color: blue;
+        font-size: 20px;
+        font-family: Arial;
+    }
+</style>
+<script src=" https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href=" https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+@Scripts.Render("~/bundles/jquery")
+<script src=" https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+<div class="text-center">
+    <h1>Registros de Productos</h1>
+    <h2>Productos</h2>
+</div>
+<hr />
+
+
+
+@using (Html.BeginForm("Index", "Productos", FormMethod.Post, new { @class = "formulario", enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                @Html.LabelFor(model => model.SubSubCategorias.SubCategorias.Categorias.IdCategoria)
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user fa-lg"></i></span>
+                    @Html.DropDownListFor(model => model.SubSubCategorias.SubCategorias.Categorias.IdCategoria, new SelectList(Model.SubSubCategorias.SubCategorias.Categorias.Categoriasobject, "IdCategoria", "Nombre"), "Selecciona la Categoria Disponible ", new { @class = "form-control", @id="ddlCategorias" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div>
+                @Html.LabelFor(model => model.SubSubCategorias.SubCategorias.IdSubCategorias)
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user fa-lg"></i></span>
+                    @if (Model.SubSubCategorias.SubCategorias.SubCategoriasObject == null)
+                    {
+                        @Html.DropDownListFor(model => model.SubSubCategorias.SubCategorias.IdSubCategorias, new SelectList(String.Empty), "Selecciona una Categoria primero ", new { @class = "form-control", @id = "ddlSubCategorias" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.SubSubCategorias.SubCategorias.IdSubCategorias, new SelectList(Model.SubSubCategorias.SubCategorias.SubCategoriasObject, "IdSubCategorias", "Nombre"), "Selecciona la SubCategoria Disponible ", new { @class = "form-control", @id = "ddlSubCategorias" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.SubSubCategorias.IdSubSubCategorias)
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user fa-lg"></i></span>
+                @if (Model.SubSubCategorias.SubSubCategoriasObject == null)
+                {
+                    @Html.DropDownListFor(model => model.SubSubCategorias.IdSubSubCategorias, new SelectList(String.Empty), "Selecciona una SubCategoria primero ", new { @class = "form-control", @id = "ddlSubSubCategorias" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.SubSubCategorias.IdSubSubCategorias, new SelectList(Model.SubSubCategorias.SubSubCategoriasObject, "IdSubSubCategorias", "Nombre"), "Selecciona la SubSubCategoria Disponible ", new { @class = "form-control", @id = "ddlSubSubCategorias" })
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    <button class="btn btn-dark" type="submit">Buscar</button>
+}
+
+
+<div class="col-auto ms-auto">
+    <a href="@Url.Action("Form", "Productos")" class="btn btn-success">Agregar</a>
+</div>
+
+@if (Model.ProductosObject.Count > 0)
+{
+    <table class="table table table-dark table-hover table-striped Letra text-center" id="TableProductos">
+        <thead>
+            <tr class="table-secondary">
+                <th class="text-center">Editar</th>
+                <th>IdProductos</th>
+                <th>Nombre</th>
+                <th>NumeroMaterial</th>
+                <th>IdSubSubCategorias</th>
+                <th>Inventario</th>
+                <th class="text-center">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (ML.Productos productos in Model.ProductosObject)
+            {
+
+                <tr>
+                    <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form","Productos", new {IdProductos = productos.IdProductos})"><i class="fa-solid fa-pen fa-bounce" style="color: #000000;" width="100" height="100"></i></a></td>
+                    <td>@productos.IdProductos</td>
+                    <td>@productos.Nombre</td>
+                    <td>@productos.NumeroMaterial</td>
+                    <td>@productos.SubSubCategorias.IdSubSubCategorias</td>
+                    <td>@productos.Inventario</td>
+                    <td class="text-center"> <a class="btn btn-danger" href="@Url.Action("Delete", "Productos" ,new {IdProductos = productos.IdProductos})" onclick="return confirm('Estas seguro de que deseas eliminar este registro?');"><i class="fa-solid fa-trash fa-bounce" width="100" height="100"></i></a>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        No existen registros en la tabla :(
+    </div>
+}
+@Scripts.Render("~/bundles/jquery")
+<script>
+    $("#ddlCategorias").change(function () {
+        $("#ddlSubCategorias").empty();
+        $.ajax({
+            url: "https://localhost:44399/Productos/SubCategoriasGetByIdCategorias", //dirección donde hara la peticion
+            type: "GET", //verbo del controlador
+            dataType: "json", //formato para la información
+            data: { IdCategorias: $("#ddlCategorias").val() }, //los datos que necesitemos enviar
+            success: function (result) {
+                $("#ddlSubCategorias").append('<option value="0">' + 'Seleccione una opción' + '</option>');
+                $.each(result, function (i, result) {
+                    $("#ddlSubCategorias").append('<option value="'
+                        + result.IdSubCategorias + '">'
+                        + result.Nombre + '</option>');
+                });
+            },
+            error: function (error) {
+                alert('Ocurrio un error la consultar la SubCategorias de la Categoria');
+            }
+        });
+    });
+    $("#ddlSubCategorias").change(function () {
+        $("#ddlSubSubCategorias").empty();
+        $.ajax({
+            url: "https://localhost:44399/Productos/SubSubCategoriasGetByIdSubCategorias", //direccion donde hara la peticion
+            type: "GET", //verbo del controlador
+            dataType: "json", //formato para la información
+            data: { IdSubCategorias: $("#ddlSubCategorias").val() }, //los datos que necesitemos enviar
+            success: function (result) {
+                $("#ddlSubSubCategorias").append('<option value="0">' + 'Seleccione una opción' + '</option>');
+                $.each(result, function (i, result) {
+                    $("#ddlSubSubCategorias").append('<option value="'
+                        + result.IdSubSubCategorias + '">'
+                        + result.Nombre + '</option>');
+                });
+            },
+            error: function (error) {
+                alert('Ocurrio un error la consultar los estados del pais');
+            }
+        });
+    });
+    $("#ddlSubSubCategorias").change(function () {
+        $("#TableProductos tbody").empty(); // Vaciamos el cuerpo de la tabla
+        $.ajax({
+            url: "https://localhost:44399/Productos/ProductosGetByIdSubSubCategorias",
+            type: "GET",
+            dataType: "json",
+            data: { IdSubSubCategorias: $("#ddlSubSubCategorias").val() },
+            success: function (result) {
+                $.each(result, function (i, result) {
+                    // Aquí es donde cambiamos los valores de la tabla.
+                    // Asegúrate de que tu tabla tenga una estructura adecuada para recibir estos datos.
+                    $('#TableProductos tbody').append(
+                        "<tr>"
+                        + "<td>" + '<a class = "btn btn-warning" href="/Receta/Form?id = ' + result.IdProductos + '">' + "EDITAR" + '</a>' + "</td>"
+                        + "<td>" + result.IdProductos + "</td>"
+                        + "<td>" + result.Nombre + "</td>"
+                        + "<td>" + result.NumeroMaterial + "</td>"
+                        + "<td>" + result.SubSubCategorias.IdSubSubCategorias + "</td>"
+                        + "<td>" + result.Inventario + "</td>"
+                        + "<td>" + '<button class="btn btn-danger" onclick="Delete(' + result.IdProductos + ')">' + "ELIMINAR" + '</button>' + "</td>"
+                        + "</tr>");
+                });
+            },
+            error: function (error) {
+                console.log('Error: ', error);
+                alert('No se pudo obtener la lista de recetas');
+            }
+        });
+    });
+
+
+</script>
